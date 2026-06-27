@@ -56,9 +56,9 @@
                     <div class="profile-details">
                         <h2 class="profile-name">Aldrid C. Nabuya</h2>
                         <div class="profile-actions">
-                            <button class="action-btn" id="btn-view-profile">View Profile <i data-lucide="chevron-down"></i></button>
+                            <button class="action-btn" id="btn-view-profile" aria-expanded="false">View Profile <i data-lucide="chevron-down"></i></button>
                             <span class="action-divider"></span>
-                            <button class="action-btn" id="btn-settings">Hobbies <i data-lucide="chevron-down"></i></button>
+                            <button class="action-btn" id="btn-settings" aria-expanded="false">Hobbies <i data-lucide="chevron-down"></i></button>
                             <span class="action-divider"></span>
                             <button class="action-btn highlight" id="btn-connect">Connect <i data-lucide="chevron-down"></i></button>
                         </div>
@@ -283,25 +283,36 @@
     </div>
 
     <!-- PROFILE DROPDOWN / MODAL -->
-    <div id="profile-modal" class="modal-overlay">
-        <div class="modal-content glass-panel">
-            <button class="modal-close" id="close-profile-modal"><i data-lucide="x"></i></button>
+    <div id="profile-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content profile-modal-content glass-panel">
+
+            <div class="profile-modal-topbar">
+                <span class="profile-modal-topbar-label" id="profile-modal-title">PROFILE</span>
+                <button class="modal-close" id="close-profile-modal" aria-label="Close profile"><i data-lucide="x"></i></button>
+            </div>
+
             <div class="profile-modal-grid">
+
+                <!-- Identity column: stays in place while the right side scrolls -->
                 <div class="profile-modal-sidebar">
-                    <img src="https://imgs.search.brave.com/UJ4MKt8e6b-yOXOFDSNPwXeoxUZrcKJCDu5oHTbySw0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA1LzQ3LzcxLzQ2/LzM2MF9GXzU0Nzcx/NDY2Ml9hOHltOWJO/cDJXOFR1V2FsRU5R/RHBoeHM3YzJQYW5R/VS5qcGc" class="modal-avatar" alt="Aldrid C. Nabuya">
+                    <div class="profile-modal-avatar-wrap">
+                        <img src="https://imgs.search.brave.com/UJ4MKt8e6b-yOXOFDSNPwXeoxUZrcKJCDu5oHTbySw0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA1LzQ3LzcxLzQ2/LzM2MF9GXzU0Nzcx/NDY2Ml9hOHltOWJO/cDJXOFR1V2FsRU5R/RHBoeHM3YzJQYW5R/VS5qcGc" class="modal-avatar" alt="Aldrid C. Nabuya">
+                        <span class="status-indicator" title="Available"></span>
+                    </div>
                     <h3>Aldrid C. Nabuya</h3>
                     <p class="subtitle">Multi-Domain Innovator</p>
+
+                    <span class="availability-badge"><i data-lucide="circle-dot"></i> Open to opportunities</span>
+
                     <div class="profile-socials">
                         <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
                         <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
                         <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+                        <a href="mailto:aldrid@example.com" aria-label="Email"><i data-lucide="mail"></i></a>
                     </div>
-                </div>
-                <div class="profile-modal-body">
-                    <h3>About Me</h3>
-                    <p>I am a multidisciplinary researcher and builder working at the intersection of technology, design, and business strategy. With hands-on expertise in design research, advanced AI integrations, cloud architecture, and data engineering, I build digital products that are functional, beautiful, and strategically aligned.</p>
-                    
-                    <h3>Quick Stats</h3>
+
+                    <a href="#" class="resume-btn" download><i data-lucide="download"></i> Download Résumé</a>
+
                     <div class="stats-grid">
                         <div class="stat-card">
                             <span class="stat-num">5+</span>
@@ -317,10 +328,79 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Scrollable body: About, Tech Stack, Journey, Featured Projects -->
+                <div class="profile-modal-body profile-scroll-container">
+
+                    <section class="profile-section">
+                        <h3><i data-lucide="user"></i> About Me</h3>
+                        <p>I am a multidisciplinary researcher and builder working at the intersection of technology, design, and business strategy. With hands-on expertise in design research, advanced AI integrations, cloud architecture, and data engineering, I build digital products that are functional, beautiful, and strategically aligned.</p>
+                    </section>
+
+                    <section class="profile-section">
+                        <h3><i data-lucide="layers"></i> Core Tech Stack</h3>
+                        <ul class="tag-list skill-tag-list" id="profile-skill-tags">
+                            <!-- Populated dynamically from script.js (coreTechStack) -->
+                        </ul>
+                    </section>
+
+                    <section class="profile-section">
+                        <h3><i data-lucide="milestone"></i> Journey</h3>
+                        <ol class="timeline" id="profile-timeline">
+                            <!-- Populated dynamically from script.js (experienceTimeline) -->
+                        </ol>
+                    </section>
+
+                    <section class="profile-section">
+                        <div class="profile-section-header">
+                            <h3><i data-lucide="layout-grid"></i> Featured Projects</h3>
+                            <button class="profile-section-link" id="btn-profile-see-all">See all <i data-lucide="arrow-right"></i></button>
+                        </div>
+                        <div class="projects-grid profile-projects-grid" id="profile-featured-projects">
+                            <!-- Populated dynamically from script.js (featuredProjects) -->
+                        </div>
+                    </section>
+
+                </div>
             </div>
         </div>
     </div>
 
+    </div>
+
+    <!-- HOBBIES MODAL -->
+    <div id="hobby-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content hobby-modal-content glass-panel">
+            <div class="profile-modal-topbar">
+                <span class="profile-modal-topbar-label">HOBBIES</span>
+                <button class="modal-close" id="close-hobby-modal" aria-label="Close hobbies"><i data-lucide="x"></i></button>
+            </div>
+            <div class="hobby-modal-body">
+                <p class="subtitle">Passions that fuel creative thinking, technical exploration, and product craftsmanship.</p>
+                <div class="hobby-grid">
+                    <div class="hobby-card">
+                        <i data-lucide="camera"></i>
+                        <h3>Photography</h3>
+                        <p>Capturing light, motion, and narrative through lens-based storytelling and visual design.</p>
+                    </div>
+                    <div class="hobby-card">
+                        <i data-lucide="music"></i>
+                        <h3>Music</h3>
+                        <p>Exploring ambient composition, sound design, and rhythmic systems that inspire product rhythm.</p>
+                    </div>
+                    <div class="hobby-card">
+                        <i data-lucide="feather"></i>
+                        <h3>Writing</h3>
+                        <p>Documenting ideas, research, and product strategy with clarity and narrative focus.</p>
+                    </div>
+                    <div class="hobby-card">
+                        <i data-lucide="sparkles"></i>
+                        <h3>Maker Projects</h3>
+                        <p>Building side experiments, prototypes, and creative tools that merge play with practical problems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     <!-- CONNECT (CONTACT) MODAL -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content glass-panel contact-modal-content">

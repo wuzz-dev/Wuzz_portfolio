@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     tag: 'Full-Stack App',
                     desc: 'A complete multi-tenant client subscription dashboard. Featuring serverless APIs, auth configurations, and custom visual charts.',
                     techs: ['Vite', 'React', 'Tailwind', 'Node.js'],
-                    link: '#'
+                    link: '#',
+                    featured: true
                 },
                 {
                     name: 'Figma Token Exporter Plugin',
@@ -43,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     tag: 'Data Pipeline',
                     desc: 'Real-time SaaS conversion funnel analytics detailing user acquisition, activation, retention, and churn metrics.',
                     techs: ['SQL', 'Tableau', 'Python', 'Pandas'],
-                    link: '#'
+                    link: '#',
+                    featured: true
                 },
                 {
                     name: 'Market Sentiment Crawler',
@@ -65,7 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     tag: 'RAG Agent',
                     desc: 'An agentic chat assistant for enterprise databases using document embeddings, vector stores, and custom semantic search.',
                     techs: ['Python', 'Gemini API', 'Pinecone', 'LangChain'],
-                    link: '#'
+                    link: '#',
+                    featured: true
                 },
                 {
                     name: 'Auto-Code Audit Engine',
@@ -102,7 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     tag: 'Three.js Art',
                     desc: 'Real-time landscape generator that morphs, scales, and glows in synchronization with microphone input audio frequencies.',
                     techs: ['Three.js', 'Web Audio API', 'GLSL Shaders'],
-                    link: '#'
+                    link: '#',
+                    featured: true
                 },
                 {
                     name: 'Fluid Dynamics Sandbox',
@@ -171,10 +175,59 @@ document.addEventListener('DOMContentLoaded', () => {
             allProjects.push({
                 ...p,
                 category: category,
-                domain: skill.title
+                domain: skill.title,
+                domainKey: key
             });
         });
     });
+
+    // Featured subset (flagged with `featured: true` on individual projects above)
+    // shown inside the "View Profile" modal. Add/remove the flag on any project
+    // to control what shows up there.
+    const featuredProjects = allProjects.filter(p => p.featured);
+
+    // Hand-picked highlights for the "Core Tech Stack" tag cloud in the profile.
+    // Edit freely — these are independent of the mind-map subdomain lists.
+    const coreTechStack = [
+        'React / Next.js', 'Python', 'FastAPI / Flask', 'LangChain',
+        'Vector Databases', 'AWS / GCP', 'Docker', 'Three.js / WebGL',
+        'SQL', 'Pandas & NumPy', 'Figma API', 'CI/CD Pipelines'
+    ];
+
+    // Quick "journey" timeline shown in the profile modal. Replace with real
+    // milestones (roles, dates, companies) whenever you're ready — this is
+    // placeholder scaffolding, same as the rest of the sample content.
+    const experienceTimeline = [
+        {
+            period: '2024 — Present',
+            title: 'Multi-Domain Consultant',
+            desc: 'Independently leading end-to-end builds across web platforms, AI automation, and data analytics for early-stage teams.'
+        },
+        {
+            period: '2022 — 2024',
+            title: 'Expanded into AI & Cloud Systems',
+            desc: 'Shipped RAG pipelines, serverless architectures, and automation tooling on top of an existing web & data foundation.'
+        },
+        {
+            period: '2020 — 2022',
+            title: 'Foundations in Web & Data',
+            desc: 'Built full-stack web apps and early analytics dashboards, developing the design + engineering core skillset.'
+        }
+    ];
+
+    // Accent gradient + icon per domain — mirrors the colors already used on
+    // the mind-map node icons and SVG connector gradients, so anything pulled
+    // from skillsData (e.g. featured project thumbnails) stays visually consistent.
+    const domainVisuals = {
+        'web-dev':          { colors: ['#06b6d4', '#3b82f6'], icon: 'globe' },
+        'data-analytics':   { colors: ['#06b6d4', '#8b5cf6'], icon: 'bar-chart-2' },
+        'ai-automation':    { colors: ['#ec4899', '#8b5cf6'], icon: 'bot' },
+        'digital-strategy': { colors: ['#f59e0b', '#8b5cf6'], icon: 'award' },
+        'creative-coding':  { colors: ['#8b5cf6', '#06b6d4'], icon: 'code-2' },
+        'python':           { colors: ['#3776ab', '#ffd343'], icon: 'terminal' },
+        'system-archi':     { colors: ['#3b82f6', '#06b6d4'], icon: 'server' },
+        'project-mgmt':     { colors: ['#ec4899', '#8b5cf6'], icon: 'check-square' }
+    };
 
     // ----------------------------------------------------------------------
     // 2. DOM ELEMENTS
@@ -289,6 +342,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileModal = document.getElementById('profile-modal');
     const openProfileBtn = document.getElementById('btn-view-profile');
     const closeProfileBtn = document.getElementById('close-profile-modal');
+    const profileSkillTags = document.getElementById('profile-skill-tags');
+    const profileTimelineList = document.getElementById('profile-timeline');
+    const profileFeaturedGrid = document.getElementById('profile-featured-projects');
+    const btnProfileSeeAll = document.getElementById('btn-profile-see-all');
+    const hobbyModal = document.getElementById('hobby-modal');
+    const openHobbyBtn = document.getElementById('btn-settings');
+    const closeHobbyBtn = document.getElementById('close-hobby-modal');
 
     // Contact Modal Elements
     const contactModal = document.getElementById('contact-modal');
@@ -374,10 +434,24 @@ document.addEventListener('DOMContentLoaded', () => {
             dockThemeBtn.setAttribute('aria-pressed', String(isDark));
         });
     }
-    // Hobbies placeholder click
-    document.getElementById('btn-settings').addEventListener('click', () => {
-        alert("Hobbies panel: photography, music, and side experiments can live here.");
-    });
+
+    if (openHobbyBtn) {
+        openHobbyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            hobbyModal.classList.add('open');
+            hobbyModal.setAttribute('aria-hidden', 'false');
+            openHobbyBtn.setAttribute('aria-expanded', 'true');
+        });
+    }
+
+    if (closeHobbyBtn) {
+        closeHobbyBtn.addEventListener('click', () => {
+            hobbyModal.classList.remove('open');
+            hobbyModal.setAttribute('aria-hidden', 'true');
+            if (openHobbyBtn) openHobbyBtn.setAttribute('aria-expanded', 'false');
+        });
+    }
 
     // ----------------------------------------------------------------------
     // 3. INTERACTIVE MOUSE FOLLOW GLOW
@@ -814,13 +888,92 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------------------------
     // 10. MODAL TRIGGERS (PROFILE & CONTACT)
     // ----------------------------------------------------------------------
+    // Build the contents of the "View Profile" modal from the same data that
+    // powers the mind-map, so the tech stack / featured work never drift out
+    // of sync with the rest of the site.
+    function populateProfileModal() {
+        // Core Tech Stack tags
+        if (profileSkillTags) {
+            const dotColors = ['#8b5cf6', '#06b6d4', '#ec4899', '#3b82f6', '#f59e0b'];
+            profileSkillTags.innerHTML = coreTechStack.map((tech, i) => `
+                <li>
+                    <span class="skill-dot" style="background:${dotColors[i % dotColors.length]}"></span>
+                    ${tech}
+                </li>
+            `).join('');
+        }
+
+        // Journey timeline
+        if (profileTimelineList) {
+            profileTimelineList.innerHTML = experienceTimeline.map(item => `
+                <li class="timeline-item">
+                    <span class="timeline-dot"></span>
+                    <span class="timeline-period">${item.period}</span>
+                    <h4 class="timeline-title">${item.title}</h4>
+                    <p class="timeline-desc">${item.desc}</p>
+                </li>
+            `).join('');
+        }
+
+        // Featured projects (with image if provided, otherwise a themed gradient + icon tile)
+        if (profileFeaturedGrid) {
+            profileFeaturedGrid.innerHTML = featuredProjects.map(p => {
+                const visual = domainVisuals[p.domainKey] || { colors: ['#8b5cf6', '#3b82f6'], icon: 'layout-grid' };
+                const thumb = p.image
+                    ? `<div class="profile-project-thumb" style="background-image:url('${p.image}')"></div>`
+                    : `<div class="profile-project-thumb" style="background:linear-gradient(135deg, ${visual.colors[0]}, ${visual.colors[1]})">
+                           <i data-lucide="${visual.icon}"></i>
+                       </div>`;
+                return `
+                    <div class="project-card">
+                        ${thumb}
+                        <div class="project-meta">
+                            <span class="project-tag">${p.domain} - ${p.tag}</span>
+                            <div class="project-links">
+                                <a href="${p.link}" class="project-link" aria-label="View Project"><i data-lucide="external-link"></i></a>
+                            </div>
+                        </div>
+                        <h4 class="project-name">${p.name}</h4>
+                        <p class="project-desc">${p.desc}</p>
+                        <div class="project-techs">
+                            ${p.techs.map(t => `<span>${t}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        lucide.createIcons();
+    }
+    populateProfileModal();
+
     // Profile Modal
-    openProfileBtn.addEventListener('click', () => {
-        profileModal.classList.add('open');
-    });
+    if (openProfileBtn) {
+        openProfileBtn.setAttribute('aria-expanded', 'false');
+        openProfileBtn.addEventListener('click', () => {
+            profileModal.classList.add('open');
+            profileModal.setAttribute('aria-hidden', 'false');
+            openProfileBtn.setAttribute('aria-expanded', 'true');
+        });
+    }
     closeProfileBtn.addEventListener('click', () => {
         profileModal.classList.remove('open');
+        profileModal.setAttribute('aria-hidden', 'true');
+        if (openProfileBtn) openProfileBtn.setAttribute('aria-expanded', 'false');
     });
+
+    // "See all" inside Featured Projects hands off to the full gallery drawer
+    if (btnProfileSeeAll) {
+        btnProfileSeeAll.addEventListener('click', () => {
+            profileModal.classList.remove('open');
+            profileModal.setAttribute('aria-hidden', 'true');
+            if (openProfileBtn) openProfileBtn.setAttribute('aria-expanded', 'false');
+            renderProjectsGallery('all');
+            filterTabs.forEach(t => t.classList.remove('active'));
+            if (filterTabs[0]) filterTabs[0].classList.add('active');
+            projectsDrawer.classList.add('open');
+        });
+    }
 
     // Contact Modal
     openContactBtn.addEventListener('click', () => {
@@ -834,11 +987,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close Modals on click outside
     window.addEventListener('click', (e) => {
-        if (e.target === profileModal) profileModal.classList.remove('open');
+        if (e.target === profileModal) {
+            profileModal.classList.remove('open');
+            profileModal.setAttribute('aria-hidden', 'true');
+            if (openProfileBtn) openProfileBtn.setAttribute('aria-expanded', 'false');
+        }
         if (e.target === contactModal) {
             contactModal.classList.remove('open');
             formFeedback.innerHTML = '';
             formFeedback.className = 'form-feedback';
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (profileModal.classList.contains('open')) {
+                profileModal.classList.remove('open');
+                profileModal.setAttribute('aria-hidden', 'true');
+                if (openProfileBtn) openProfileBtn.setAttribute('aria-expanded', 'false');
+            }
+            if (contactModal.classList.contains('open')) {
+                contactModal.classList.remove('open');
+                formFeedback.innerHTML = '';
+                formFeedback.className = 'form-feedback';
+            }
         }
     });
 
